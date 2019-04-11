@@ -104,36 +104,39 @@ function agentInstructions(agent, idx)
 //Fired on page / post change evaluate if the tag called codeformat was added to the post
 //if the tag exists and the current user is the author of the post call clippy to action
 api.onPageChange(() =>{
+            //Wait 3 seconds trying to make sure that the post has finished loading... there may be a better way to do this
           setTimeout(function() {
                 var u = Discourse.User.current();
                 if (u !== null && !window.mobileAndTabletcheck()){
+                    //Get the author of the topic
                     var author = $("#post_1").find(".first.username").children("a").attr("data-user-card");
-                	    var format = $(".discourse-tags").children("a[data-tag-name='codeformat']").attr("data-tag-name");
-                	    var clip = getUrlParameter('clip');
-                	    if(clip==undefined)
-                	    {
-                    	    if(author === u.username && format!==undefined  && clp==undefined)
-                    	    {
-                    	            clippy.load('Clippy', function(agent){
-                    	            clp=agent;     
-                                    agent.show();
-                                    agent.moveTo(100,100)
-                                    agent.play('GetAttention');
-                                    agent.speak('Hello ' + author + ' good to see you are back... So this is awkward...');
-                                    setTimeout(function() {
-                                    agentInstructions(agent,0);
-                                    },6000);
-            
-                                });
-                    	    }
-                    	    else if(clp!=undefined && format==undefined)
-                    	    {
-                    	        clp.stop();
-                    	        clp.hide(false,null);
-                    	        clp=undefined;
-                    	        stopall=true;
-                    	    }
-                	    }
+                    //get the format tag
+                	var format = $(".discourse-tags").children("a[data-tag-name='codeformat']").attr("data-tag-name");
+                	
+                    //If the author matches the logged in user and the format tag is define, call onto clippy to NAG
+                    if(author === u.username && format!==undefined  && clp==undefined)
+                    {
+                            clippy.load('Clippy', function(agent){
+                            clp=agent;     
+                            agent.show();
+                            agent.moveTo(100,100)
+                            agent.play('GetAttention');
+                            agent.speak('Hello ' + author + ' good to see you are back... So this is awkward...');
+                            setTimeout(function() {
+                            agentInstructions(agent,0);
+                            },6000);
+
+                        });
+                    }
+                    //Otherwise stop nagging
+                    else if(clp!=undefined && format==undefined)
+                    {
+                        clp.stop();
+                        clp.hide(false,null);
+                        clp=undefined;
+                        stopall=true;
+                    }
+                	    
                 }
           },3000);
     });
