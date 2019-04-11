@@ -5,7 +5,7 @@ For our own discourse site we implemented a nagging clippy which reminds users t
 * Edit your Themes CSS/HTMl to add all the required CSS and Java Script below
 * Clippy will fire if the tag named "codeformat" is added to a post and the current person logged in is the author of the topic (first post)
 
-# </head> Section Edits
+# HEAD Section Edits
 ```javascript
 //Bring in Clippy from the latest published package
 <script src="https://unpkg.com/clippyjs_html@0.0.15"></script>
